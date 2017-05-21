@@ -6,6 +6,7 @@ from django.contrib.admin.util import lookup_needs_distinct
 from django.contrib.contenttypes.generic import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from functools import reduce
 
 logger = logging.getLogger('modeladmin_utils.mixins.search')
 
@@ -154,7 +155,7 @@ or define a 'related_search_mapping' argument which limits the ctypes.""")
                                 "<dict>, <Q>, <iterable of 2 elem. tuples>")
 
             ids = defaultdict(list)
-            for rel_field, fields in fields_mapping.items():
+            for rel_field, fields in list(fields_mapping.items()):
                 query = generate_q_object(fields)
                 if not query:
                     logger.warn('No Q instance returned')
@@ -187,7 +188,7 @@ or define a 'related_search_mapping' argument which limits the ctypes.""")
                           for orm_lookup in orm_lookups]
 
             # append generic related filters to or_queries
-            for obj_id, ids_list in related_ids.items():
+            for obj_id, ids_list in list(related_ids.items()):
                 or_queries.append(Q(
                     **{
                         '%s__in' % obj_id: ids_list

@@ -1,1 +1,1 @@
-from limited_inlines import LimitedInlineFormset, LimitInlinesAdminMixin
+from .limited_inlines import LimitedInlineFormset, LimitInlinesAdminMixin
